@@ -143,30 +143,33 @@ moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, 
         {
             for(int move = 1;move<=DOWN;move=move<<1)
             {
-                if ( (_board[i][j] & move) == 0)
+                if((move == RIGHT && j<SIZE-1)||(move==DOWN && i<SIZE-1))
                 {
-                    
-                    //settab(MAX_LEVEL - level);
-                    
-                    memcpy(_newboard, _board, 2 * 6 * sizeof(char));//memcpy(boards[level], _board, 2 * 6 * sizeof(char));//
-                    memcpy(_newzone, _zone, 2 * sizeof(char));//memcpy(zones[level], _zone, 2 * sizeof(char));//
-                    
-                    if (make_move(_newboard, _newzone, i , j, move, player))//if (make_move(boards[level], zones[level], j, player))//
-                        get_next_move(_newboard, _newzone, player, level - 1);//get_next_move(boards[level], zones[level], player, level - 1);//
-                    else
-                        get_next_move(_newboard, _newzone, otherplayer, level - 1);//get_next_move(boards[level], zones[level], otherplayer, level - 1);//
-                    
-                    
-                    
-                    if (_bestzone[player] - _bestzone[otherplayer] - (_newzone[player] - _newzone[otherplayer]) < 0)
-                        isBetter = true;
-                    
-                    if (isBetter)
+                    if ((_board[i][j] & move) == 0)
                     {
-                        memcpy(_bestzone, _newzone, 2 * sizeof(char)); //memcpy(_bestzone, zones[level], 2 * sizeof(char));//memcpy(_bestzone, _newzone, 2 * sizeof(char));
-                        //memcpy(_bestboard, _newboard, 2 * 6 * sizeof(char)); //memcpy(_bestboard, boards[level], 2 * 6 * sizeof(char));//memcpy(_bestzone, _newzone, 2 * sizeof(char));
-                        bestmove.x = i;bestmove.y = j; bestmove.move = move;
-                        isBetter = false;
+                        
+                        //settab(MAX_LEVEL - level);
+                        
+                        memcpy(_newboard, _board, 2 * 6 * sizeof(char));//memcpy(boards[level], _board, 2 * 6 * sizeof(char));//
+                        memcpy(_newzone, _zone, 2 * sizeof(char));//memcpy(zones[level], _zone, 2 * sizeof(char));//
+                        
+                        if (make_move(_newboard, _newzone, i , j, move, player))//if (make_move(boards[level], zones[level], j, player))//
+                            get_next_move(_newboard, _newzone, player, level - 1);//get_next_move(boards[level], zones[level], player, level - 1);//
+                        else
+                            get_next_move(_newboard, _newzone, otherplayer, level - 1);//get_next_move(boards[level], zones[level], otherplayer, level - 1);//
+                        
+                        
+                        
+                        if (_bestzone[player] - _bestzone[otherplayer] - (_newzone[player] - _newzone[otherplayer]) < 0)
+                            isBetter = true;
+                        
+                        if (isBetter)
+                        {
+                            memcpy(_bestzone, _newzone, 2 * sizeof(char)); //memcpy(_bestzone, zones[level], 2 * sizeof(char));//memcpy(_bestzone, _newzone, 2 * sizeof(char));
+                            //memcpy(_bestboard, _newboard, 2 * 6 * sizeof(char)); //memcpy(_bestboard, boards[level], 2 * 6 * sizeof(char));//memcpy(_bestzone, _newzone, 2 * sizeof(char));
+                            bestmove.x = i;bestmove.y = j; bestmove.move = move;
+                            isBetter = false;
+                        }
                     }
                 }
             }
@@ -263,7 +266,7 @@ int main(int argc, char* argv[])
             fprintf(fp,"\nINPUT OPPONENT %s\n",input.c_str());
             fflush(fp);
             x1=input[1] - '0'; y1= input[3] - '0';
-            x2=input[7] - '0'; y1= input[9] - '0';
+            x2=input[7] - '0'; y2= input[9] - '0';
             if(x1==x2)
             {
                 move = RIGHT;
