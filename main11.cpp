@@ -67,19 +67,39 @@ void init()
     zone[1] = 0;
 }
 
-void print_board(char _board[][10],char* _zone)
-{
-    fprintf(fp,"\n%s---------------------------------------------\n%s  ",tabs,tabs);
-    
-    fprintf(fp, "%d %d %d %d %d %d", _board[0][0], _board[0][1], _board[0][2], _board[0][3], _board[0][4], _board[0][5]);
-    
-    fprintf(fp, "\n%s%d              %d\n%s  ", tabs, _zone[0],_zone[1], tabs);
-    
-    fprintf(fp, "%d %d %d %d %d %d", _board[1][0], _board[1][1], _board[1][2], _board[1][3], _board[1][4], _board[1][5]);
-    
-    fprintf(fp, "\n%s--------------------------------------------\n%s", tabs, tabs);
+void print_board(){
+    fprintf(fp,"\n");
+    for(int i=0;i<SIZE;i++){
+        for(int j=0;j<SIZE;j++){
+            fprintf(fp,".");
+            if( (board[i][j]&RIGHT)=RIGHT)
+                fprintf(fp,"__");
+            else
+                fprintf(fp,"  ");
+        }
+        fprintf(fp,"\n");
+        for(int j=0;j<SIZE;j++){
+            if( (board[i][j]&DOWN)=DOWN)
+                fprintf(fp,"| ");
+            else
+                fprintf(fp,"  ");
+        }
+    }
 }
 
+//void print_board(char _board[][10],char* _zone)
+//{
+//    fprintf(fp,"\n%s---------------------------------------------\n%s  ",tabs,tabs);
+//    
+//    fprintf(fp, "%d %d %d %d %d %d", _board[0][0], _board[0][1], _board[0][2], _board[0][3], _board[0][4], _board[0][5]);
+//    
+//    fprintf(fp, "\n%s%d              %d\n%s  ", tabs, _zone[0],_zone[1], tabs);
+//    
+//    fprintf(fp, "%d %d %d %d %d %d", _board[1][0], _board[1][1], _board[1][2], _board[1][3], _board[1][4], _board[1][5]);
+//    
+//    fprintf(fp, "\n%s--------------------------------------------\n%s", tabs, tabs);
+//}
+//
 bool make_move(char _board[][10], unsigned char *_zone, int x, int y, int move, int player)
 {
     _board[x][y] |= move;
@@ -281,6 +301,8 @@ int main(int argc, char* argv[])
             //print_board(board, zone);
             available_moves--;
         }
+        
+        print_board();
         fflush(fp);
         cout.flush();
     }
