@@ -243,7 +243,7 @@ int main(int argc, char* argv[])
             //print_board(board, zone);
             memcpy(tempzone, zone, 2 * sizeof(char));
             memcpy(tempboard, board, 2 * 6 * sizeof(char));
-            levels=get_level_dynamic(available_moves);
+            levels=2;//get_level_dynamic(available_moves);
             fprintf(fp, "\nLEVELS:%d\n",levels);
             fflush(fp);
             moveT mymove= get_next_move(tempboard, tempzone, playerId, levels );   //however you implement it
