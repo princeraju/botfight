@@ -19,8 +19,8 @@
 
 
 #define RIGHT 1
-#define DOWN 2
-#define BOTH 3
+#define DOWN 4
+#define BOTH 5
 
 #define SIZE 10
 
@@ -103,13 +103,13 @@ void print_board(){
 //void print_board(char _board[][10],char* _zone)
 //{
 //    fprintf(fp,"\n%s---------------------------------------------\n%s  ",tabs,tabs);
-//    
+//
 //    fprintf(fp, "%d %d %d %d %d %d", _board[0][0], _board[0][1], _board[0][2], _board[0][3], _board[0][4], _board[0][5]);
-//    
+//
 //    fprintf(fp, "\n%s%d              %d\n%s  ", tabs, _zone[0],_zone[1], tabs);
-//    
+//
 //    fprintf(fp, "%d %d %d %d %d %d", _board[1][0], _board[1][1], _board[1][2], _board[1][3], _board[1][4], _board[1][5]);
-//    
+//
 //    fprintf(fp, "\n%s--------------------------------------------\n%s", tabs, tabs);
 //}
 //
@@ -117,7 +117,7 @@ bool make_move(char _board[][10], unsigned char *_zone, int x, int y, int move, 
 {
     _board[x][y] |= (move&RIGHT)==RIGHT?RIGHT:DOWN;
     bool didCloseBox = false;
-    
+
     if (move == RIGHT)
     {
         if (x>0)
@@ -154,12 +154,52 @@ bool make_move(char _board[][10], unsigned char *_zone, int x, int y, int move, 
 
 moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, int level)
 {
+    int temp;
     moveT bestmove;
     bestmove.x=0;
     bestmove.y=0;
     bestmove.move=RIGHT;
     if (level < 1)
         return bestmove;
+
+    for (int i = 0; i < SIZE; i++)
+    {
+        for (int j = 0; j < SIZE; j++)
+        {
+            temp=_board[i][j]+ (_board[i][j+1]&DOWN)+ (_board[i+1][j]&RIGHT);
+            if(temp==9 || temp==6)
+            {
+                if( (_board[i][j]&RIGHT)==0 )
+                    {
+                        bestmove.x=i;
+                        bestmove.y=j;
+                        bestmove.move=RIGHT;
+                        return bestmove;
+                    }
+                else if( (_board[i][j]&DOWN)==0 )
+                    {
+                        bestmove.x=i;
+                        bestmove.y=j;
+                        bestmove.move=DOWN;
+                        return bestmove;
+                    }
+                else if( (_board[i+1][j]&RIGHT)==0 )
+                    {
+                        bestmove.x=i+1;
+                        bestmove.y=j;
+                        bestmove.move=RIGHT;
+                        return bestmove;
+                    }
+                else if( (_board[i][j+1]&DOWN)==0 )
+                    {
+                        bestmove.x=i;
+                        bestmove.y=j+1;
+                        bestmove.move=DOWN;
+                        return bestmove;
+                    }
+            }
+        }
+    }
     char _newboard[SIZE][SIZE];
     unsigned char _newzone[2];
     //char _bestboard[10][10];
@@ -168,7 +208,7 @@ moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, 
     //int zone_dif;
     int otherplayer = player == PLAYER_1 ? PLAYER_2 : PLAYER_1;
     //fprintf(fp, "\n%sFinding move for player %d level %d\n",tabs, player+1, level);
-    
+
     //fprintf(fp,"LEVEL %d player %d\n",level,player);
     //fflush(fp);
     memcpy(_bestzone, _zone, 2 * sizeof(char));
@@ -176,31 +216,31 @@ moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, 
     {
         for (int j = 0; j < SIZE; j++)
         {
-            for(int move = 1;move<=DOWN;move=move<<1)
+            for(int move = 1;move<=DOWN;move=move+3)
             {
                 if((move == RIGHT && j<SIZE-1)||(move==DOWN && i<SIZE-1))
-                {   
+                {
 
                     if ((_board[i][j] & move) == 0)
                     {
-                        
+
                         //settab(MAX_LEVEL - level);
                         //if(level == 2)
                         //    fprintf(fp,"LEVEL [%d] x [%d] y [%d] curr_state [%d] move [%d]\n",level,i,j,_board[i][j],move);
                         //fflush(fp);
                         memcpy(_newboard, _board, SIZE * SIZE * sizeof(char));//memcpy(boards[level], _board, 2 * 6 * sizeof(char));//
                         memcpy(_newzone, _zone, 2 * sizeof(char));//memcpy(zones[level], _zone, 2 * sizeof(char));//
-                        
+
                         if (make_move(_newboard, _newzone, i , j, move, player))//if (make_move(boards[level], zones[level], j, player))//
                             get_next_move(_newboard, _newzone, player, level - 1);//get_next_move(boards[level], zones[level], player, level - 1);//
                         else
                             get_next_move(_newboard, _newzone, otherplayer, level - 1);//get_next_move(boards[level], zones[level], otherplayer, level - 1);//
-                        
-                        
-                        
+
+
+
                         if (_bestzone[player] - _bestzone[otherplayer] - (_newzone[player] - _newzone[otherplayer]) < 0)
                             isBetter = true;
-                        
+
                         if (isBetter)
                         {
                             memcpy(_bestzone, _newzone, 2 * sizeof(char)); //memcpy(_bestzone, zones[level], 2 * sizeof(char));//memcpy(_bestzone, _newzone, 2 * sizeof(char));
@@ -211,7 +251,7 @@ moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, 
                     }
                 }
             }
-            
+
         }
     }
     memcpy(_zone, _bestzone, 2 * sizeof(char));
@@ -252,7 +292,7 @@ int main(int argc, char* argv[])
         fp = fopen( argv[1], "w");
     else
         fp = fopen( "default_log.txt", "w");
-    
+
     bool done = false;
     while (!done)
     {
@@ -302,7 +342,7 @@ int main(int argc, char* argv[])
             available_moves--;
         }
         else if (commandis(input, "OPPONENT_MOVE")) //update you board state
-        { 
+        {
             cin >> input;
             fprintf(fp,"\nINPUT OPPONENT %s\n",input.c_str());
             fflush(fp);
@@ -325,7 +365,7 @@ int main(int argc, char* argv[])
             //print_board(board, zone);
             available_moves--;
         }
-        
+
         print_board();
         fflush(fp);
         cout.flush();
