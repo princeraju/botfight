@@ -68,6 +68,11 @@ void init()
 }
 
 void print_board(){
+    for(int i=0;i<SIZE;i++){
+        for(int j=0;j<SIZE;j++)
+            fprintf(fp,"%d ",board[i][j]);
+        fprintf(fp,"\n");
+    }
     fprintf(fp,"\n");
     for(int i=0;i<SIZE;i++){
         for(int j=0;j<SIZE;j++){
@@ -103,7 +108,7 @@ void print_board(){
 //
 bool make_move(char _board[][10], unsigned char *_zone, int x, int y, int move, int player)
 {
-    _board[x][y] |= move;
+    _board[x][y] |= (move&RIGHT)==RIGHT?RIGHT:DOWN;
     bool didCloseBox = false;
     
     if (move == RIGHT)
@@ -157,6 +162,8 @@ moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, 
     int otherplayer = player == PLAYER_1 ? PLAYER_2 : PLAYER_1;
     //fprintf(fp, "\n%sFinding move for player %d level %d\n",tabs, player+1, level);
     
+    //fprintf(fp,"LEVEL %d player %d\n",level,player);
+    //fflush(fp);
     memcpy(_bestzone, _zone, 2 * sizeof(char));
     for (int i = 0; i < SIZE; i++)
     {
@@ -165,13 +172,16 @@ moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, 
             for(int move = 1;move<=DOWN;move=move<<1)
             {
                 if((move == RIGHT && j<SIZE-1)||(move==DOWN && i<SIZE-1))
-                {
+                {   
+
                     if ((_board[i][j] & move) == 0)
                     {
                         
                         //settab(MAX_LEVEL - level);
-                        
-                        memcpy(_newboard, _board, 2 * 6 * sizeof(char));//memcpy(boards[level], _board, 2 * 6 * sizeof(char));//
+                        if(level == 2)
+                            fprintf(fp,"LEVEL [%d] x [%d] y [%d] curr_state [%d] move [%d]\n",level,i,j,_board[i][j],move);
+                        fflush(fp);
+                        memcpy(_newboard, _board, SIZE * SIZE * sizeof(char));//memcpy(boards[level], _board, 2 * 6 * sizeof(char));//
                         memcpy(_newzone, _zone, 2 * sizeof(char));//memcpy(zones[level], _zone, 2 * sizeof(char));//
                         
                         if (make_move(_newboard, _newzone, i , j, move, player))//if (make_move(boards[level], zones[level], j, player))//
