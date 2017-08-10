@@ -218,6 +218,8 @@ int main(int argc, char* argv[])
         string input;
         fflush(stdin);
         cin>>input;
+        fprintf(fp,"\nINPUT %s",input.c_str());
+        fflush(fp);
         //ostringstream os;
         if (commandis(input, "START"))  //START:X
         {
@@ -258,6 +260,8 @@ int main(int argc, char* argv[])
         else if (commandis(input, "OPPONENT_MOVE")) //update you board state
         { 
             cin >> input;
+            fprintf(fp,"\nINPUT OPPONENT %s",input.c_str());
+            fflush(fp);
             x1=input[1] - '0'; y1= input[3] - '0';
             x2=input[7] - '0'; y1= input[9] - '0';
             if(x1==x2)
