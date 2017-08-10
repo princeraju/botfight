@@ -244,12 +244,13 @@ int main(int argc, char* argv[])
             memcpy(tempzone, zone, 2 * sizeof(char));
             memcpy(tempboard, board, 2 * 6 * sizeof(char));
             levels=get_level_dynamic(available_moves);
-            fprintf(fp, "LEVELS:%d",levels);
+            fprintf(fp, "\nLEVELS:%d\n",levels);
+            fflush(fp);
             moveT mymove= get_next_move(tempboard, tempzone, playerId, levels );   //however you implement it
-            fprintf(fp, "\nWE_MOVED %d %d %d", (int)mymove.x, (int)mymove.y, (int)mymove.move );
+            fprintf(fp, "\nWE_MOVED %d %d %d\n", (int)mymove.x, (int)mymove.y, (int)mymove.move );
+            fflush(fp);
             make_move(board, zone, mymove.x, mymove.y, mymove.move, playerId);
             //print_board(board, zone);
-            fflush(fp);
             if(mymove.move == RIGHT)
                 cout << "("<<(int)mymove.x <<"," <<(int)mymove.y<<"),("<<(int)mymove.x<<","<<(int)mymove.y+1<<")\n";
             if(mymove.move == DOWN)
