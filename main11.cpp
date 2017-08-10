@@ -67,6 +67,13 @@ void init()
     zone[1] = 0;
 }
 
+void print_board(char _board[][10]){
+    for(int i=0;i<SIZE;i++){
+        for(int j=0;j<SIZE;j++)
+            fprintf(fp,"%d ",_board[i][j]);
+        fprintf(fp,"\n");
+    }
+}
 void print_board(){
     for(int i=0;i<SIZE;i++){
         for(int j=0;j<SIZE;j++)
@@ -178,9 +185,9 @@ moveT get_next_move(const char _board[][SIZE],unsigned char *_zone, int player, 
                     {
                         
                         //settab(MAX_LEVEL - level);
-                        if(level == 2)
-                            fprintf(fp,"LEVEL [%d] x [%d] y [%d] curr_state [%d] move [%d]\n",level,i,j,_board[i][j],move);
-                        fflush(fp);
+                        //if(level == 2)
+                        //    fprintf(fp,"LEVEL [%d] x [%d] y [%d] curr_state [%d] move [%d]\n",level,i,j,_board[i][j],move);
+                        //fflush(fp);
                         memcpy(_newboard, _board, SIZE * SIZE * sizeof(char));//memcpy(boards[level], _board, 2 * 6 * sizeof(char));//
                         memcpy(_newzone, _zone, 2 * sizeof(char));//memcpy(zones[level], _zone, 2 * sizeof(char));//
                         
@@ -219,7 +226,7 @@ int get_level_dynamic(int available_moves)
     int level=0;
     if(available_moves<5)
         return available_moves;
-    int max_cycles=10000000;
+    int max_cycles=1000000;
     while(max_cycles>1 && available_moves>1)
     {
         level++;
@@ -276,8 +283,11 @@ int main(int argc, char* argv[])
             //settab(0);
             //print_board(board, zone);
             memcpy(tempzone, zone, 2 * sizeof(char));
-            memcpy(tempboard, board, 2 * 6 * sizeof(char));
-            levels=2;//get_level_dynamic(available_moves);
+            memcpy(tempboard, board, SIZE * SIZE * sizeof(char));
+            //print_board(board);
+            //print_board(tempboard);
+            levels=get_level_dynamic(available_moves);
+            levels= levels>3?3:levels;
             fprintf(fp, "\nLEVELS:%d\n",levels);
             fflush(fp);
             moveT mymove= get_next_move(tempboard, tempzone, playerId, levels );   //however you implement it
