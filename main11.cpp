@@ -72,14 +72,14 @@ void print_board(){
     for(int i=0;i<SIZE;i++){
         for(int j=0;j<SIZE;j++){
             fprintf(fp,".");
-            if( (board[i][j]&RIGHT)=RIGHT)
+            if( (board[i][j]&RIGHT)==RIGHT)
                 fprintf(fp,"__");
             else
                 fprintf(fp,"  ");
         }
         fprintf(fp,"\n");
         for(int j=0;j<SIZE;j++){
-            if( (board[i][j]&DOWN)=DOWN)
+            if( (board[i][j]&DOWN)==DOWN)
                 fprintf(fp,"| ");
             else
                 fprintf(fp,"  ");
