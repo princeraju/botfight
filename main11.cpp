@@ -84,6 +84,7 @@ void print_board(){
             else
                 fprintf(fp,"  ");
         }
+        fprintf(fp,"\n");
     }
 }
 
