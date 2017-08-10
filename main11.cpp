@@ -225,16 +225,19 @@ int main(int argc, char* argv[])
             cin>>input;
             playerId = input[0] - '1';  //hack to get player id
             fprintf(fp, "Player Id =%d\n", playerId);
+            fflush(fp);
         }
         else if (commandis(input, "STOP"))
         {
             //os << "STOPPED";
             fprintf(fp, "\nSTOPPED\n\n\n");
+            fflush(fp);
             done = true;
         }
         else if (commandis(input, "YOUR_MOVE"))
         {
             fprintf(fp,"\nYOUR_MOVE");
+            fflush(fp);
             //settab(0);
             //print_board(board, zone);
             memcpy(tempzone, zone, 2 * sizeof(char));
@@ -245,6 +248,7 @@ int main(int argc, char* argv[])
             fprintf(fp, "\nWE_MOVED %d %d %d", (int)mymove.x, (int)mymove.y, (int)mymove.move );
             make_move(board, zone, mymove.x, mymove.y, mymove.move, playerId);
             //print_board(board, zone);
+            fflush(fp);
             if(mymove.move == RIGHT)
                 cout << "("<<(int)mymove.x <<"," <<(int)mymove.y<<"),("<<(int)mymove.x<<","<<(int)mymove.y+1<<")\n";
             if(mymove.move == DOWN)
